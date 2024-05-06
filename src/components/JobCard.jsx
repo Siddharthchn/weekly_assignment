@@ -72,31 +72,69 @@ const JobCard = () => {
 
   return (
     <>
-         <div class="filters">
-  <div>
-    <label for="input1">Min Experience :</label>
-    <input type="text" id="input1" />
-  </div>
-  <div>
-    <label for="input2">Min Base Pay :</label>
-    <input type="text" id="input2" />
-  </div>
-  <div>
-    <label for="input3">Company Name :</label>
-    <input type="text" id="input3" />
-  </div>
-  <div>
-    <label for="input4">Location :</label>
-    <input type="text" id="input4" />
-  </div>
-  <div>
-    <label for="input5">Role :</label>
-    <input type="text" id="input5" />
-  </div>
-  <div>
-    <CiSearch style={{fontSize: '25px', marginTop: '13px'}}/>
-  </div>
-</div>
+         <div className="filters">
+        <div>
+          <label htmlFor="input1">Min Experience:</label>
+          <select id="input1">
+            <option value="0">0 years</option>
+            <option value="1">1 year</option>
+            <option value="2">2 years</option>
+            <option value="3">3 years</option>
+            <option value="4">4 years</option>
+            <option value="5">5 years</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="input2">Min Base Pay:</label>
+          <select id="input2">
+            <option value="10000">20-60 usd</option>
+            <option value="20000">60-80 usd</option>
+            <option value="30000">80-100 usd</option>
+            <option value="40000">100-120 usd</option>
+            <option value="50000">120-140 usd</option>
+            <option value="60000">140-160 usd</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="input3">Type :</label>
+          <select id="input3">
+            <option value="Remote">Remote</option>
+            <option value="On-site">On-site</option>
+            <option value="Hybrid">Hybrid</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="input4">Location:</label>
+          <select id="input4">
+            <option value="New York">New York</option>
+            <option value="San Francisco">San Francisco</option>
+            <option value="Los Angeles">Los Angeles</option>
+            <option value="Chicago">Chicago</option>
+            <option value="Boston">Boston</option>
+            <option value="Seattle">Seattle</option>
+          </select>
+        </div>
+        <div>
+          <label htmlFor="input5">Role:</label>
+          <select id="input5">
+            <option value="Software Engineer">Software Engineer</option>
+            <option value="Data Analyst">Data Analyst</option>
+            <option value="Product Manager">Product Manager</option>
+            <option value="UX/UI Designer">UX/UI Designer</option>
+            <option value="Marketing Specialist">Marketing Specialist</option>
+            <option value="Sales Representative">Sales Representative</option>
+          </select>
+        </div>
+        <div>
+        <label htmlFor="input6">Company Name:</label>
+        <input type="text" placeholder="Enter Company Name " />
+        </div>
+        <div>
+          <button className="search-button">
+            <CiSearch style={{ fontSize: '25px', marginTop: '13px' }} />
+          </button>
+        </div>
+      </div>
 
       <div className="job-container">
         {isLoading && <p>Loading...</p>}
