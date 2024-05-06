@@ -1,26 +1,19 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
+import './Navbar.css'; // Import CSS file for styling
+import image from '../assets/letter-w.png'
+import { FaHandSparkles } from "react-icons/fa";
 
 const Navbar = () => {
   return (
-    <AppBar position="static">
-      <Toolbar>
-        <IconButton
-          size="large"
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          sx={{ mr: 2, display: { xs: 'block', md: 'none' } }}
-        >
-          <MenuIcon />
-        </IconButton>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          My App
-        </Typography>
-        <Button color="inherit">Login</Button>
-      </Toolbar>
-    </AppBar>
+    <div className="navbar">
+      <div className="logo">
+        <img src={image} className="app-name"/>
+      </div>
+      <div className="login-button">
+        <span> 👋  </span>
+        <p>Siddharth</p>
+      </div>
+    </div>
   );
 };
 
