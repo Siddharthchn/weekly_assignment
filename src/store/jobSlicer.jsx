@@ -5,7 +5,7 @@ export const fetchJob = createAsyncThunk("fetchTodo", async () => {
   myHeaders.append("Content-Type", "application/json");
 
   const body = JSON.stringify({
-    limit: 100,
+    limit: 64,
     offset: 0,
   });
 
@@ -38,6 +38,11 @@ const jobSlice = createSlice({
     error: null,
     totalCount: 0,
   },
+  reducers: {
+    updateFilteredData(state, action) {
+      state.data = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchJob.pending, (state) => {
@@ -56,4 +61,8 @@ const jobSlice = createSlice({
   },
 });
 
+// Export the action creator from jobSlice
+export const { updateFilteredData } = jobSlice.actions;
+
 export default jobSlice.reducer;
+

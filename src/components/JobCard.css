@@ -1,13 +1,115 @@
-.filters{
+.filters {
   display: flex;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 30px;
   margin-top: 30px;
-  margin-left: 50px;
+  margin-left: 40px;
 }
 
-.filters div {
+.filters > div {
   display: flex;
+  align-items: center;
   flex-direction: column;
+}
+
+.filters label {
+  margin-bottom: 5px;
+  color: #4c4b4c;
+}
+
+.filters select,
+.filters input[type="text"] {
+  padding: 10px 12px;
+  border: 1px solid lightgray;
+  border-radius: 7px;
+  width: 100%;
+  font-size: 15px;
+  font-weight: 400;
+  color: #4c4b3c;
+}
+
+
+
+.filters select:focus {
+  outline: none;
+  border-color: #4c4b4c;
+}
+
+.filters input:focus{
+  outline: none;
+  border-color: #4c4b4c;
+}
+
+.filters option{
+  font-size: 14px;
+  font-weight: 500;
+}
+
+
+.input-name{
+  width: 16%;
+}
+
+.search-button-wrapper{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.search-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+
+}
+
+.search-button:hover {
+  background-color: #0056b3;
+}
+
+@media only screen and (max-width: 600px) {
+
+  .filters{
+    display: flex;
+    gap: 6px;
+    margin-left: 30px;
+    margin-top: 20px;
+  }
+
+  .filters label {
+    display: none;
+  }
+
+  .filters option{
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .input-name{
+    width: 50%;
+  }
+
+  .search-button-wrapper{
+    margin-top: 0;
+    margin-left: 10px;
+  }
+
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1024px) {
+  .filters {
+    display: flex;
+    gap: 8px;
+  }
+
+  .input-name{
+    width: 18%;
+  }
+  
 }
 
 
@@ -17,7 +119,7 @@
   grid-template-columns: repeat(4, 1fr); 
   gap: 30px;
   padding: 10px 30px;
-  margin: 60px 10px 10px 10px;
+  margin: 40px 10px 10px 10px;
 }
 
 @media only screen and (max-width: 600px) {

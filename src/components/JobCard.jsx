@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchJob } from "../store/jobSlicer";
+import { updateFilteredData } from "../store/jobSlicer";
 import "./JobCard.css";
 import { IoIosFlash } from "react-icons/io";
 import { FaPlus } from "react-icons/fa6";
@@ -8,7 +9,7 @@ import { CiSearch } from "react-icons/ci";
 
 const JobCard = () => {
   const dispatch = useDispatch();
-  const { isLoading, data, error, totalCount } = useSelector(
+  const { isLoading, data, error, totalCount, filteredData } = useSelector(
     (state) => state.job
   );
   const [showModal, setShowModal] = useState(false);
@@ -16,12 +17,19 @@ const JobCard = () => {
   const [initialLoadCount, setInitialLoadCount] = useState(12);
   const modalRef = useRef(null);
   const [isFetching, setIsFetching] = useState(false);
+  const [filters, setFilters] = useState({
+    experience: "",
+    minBasePay: "",
+    type: "",
+    location: "",
+    role: "",
+    companyName: "",
+  });
 
   useEffect(() => {
     dispatch(fetchJob());
   }, [dispatch]);
 
-  // Load more job cards when user scrolls to the bottom
   useEffect(() => {
     const handleScroll = () => {
       if (
@@ -35,7 +43,7 @@ const JobCard = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isFetching]); // Only trigger when the fetching state changes
+  }, [isFetching]);
 
   useEffect(() => {
     if (!isFetching) return;
@@ -43,7 +51,7 @@ const JobCard = () => {
     if (data.length < totalCount) {
       setTimeout(() => {
         loadMoreJobs();
-      }, 1000); // Simulating delay
+      }, 1000);
     } else {
       setIsFetching(false);
     }
@@ -52,7 +60,7 @@ const JobCard = () => {
   const loadMoreJobs = () => {
     const newLoadCount = initialLoadCount + 12;
     setInitialLoadCount(newLoadCount > totalCount ? totalCount : newLoadCount);
-    setIsFetching(false); // Reset isFetching to allow for subsequent loads
+    setIsFetching(false);
   };
 
   const handleShowMore = (job) => {
@@ -70,23 +78,67 @@ const JobCard = () => {
     }
   };
 
+  const handleExperienceChange = (e) => {
+    const experienceValue = e.target.value;
+    setFilters((prevFilters) => ({ ...prevFilters, experience: experienceValue }));
+  };
+  
+  const handleMinBasePayChange = (e) => {
+    const minBasePayValue = e.target.value;
+    setFilters((prevFilters) => ({ ...prevFilters, minBasePay: minBasePayValue }));
+  };
+  
+  const handleSearch = () => {
+    console.log("Filters:", filters); // Check if filters contain the expected values
+    
+    const filteredData = data.filter(job => {
+      if (
+        (filters.experience && parseInt(filters.experience) !== job.maxExp) ||
+        (filters.minBasePay && parseInt(filters.minBasePay) > job.minJdSalary) ||
+        (filters.type && filters.type !== job.type) ||
+        (filters.location && filters.location !== job.location) ||
+        (filters.role && filters.role !== job.jobRole) ||
+        (filters.companyName && !job.companyName.toLowerCase().includes(filters.companyName.toLowerCase()))
+      ) {
+        return false;
+      }
+      return true;
+    });
+  
+    console.log("Filtered Data:", filteredData); // Check the filtered data
+  
+    // Update state with filtered data
+    dispatch(updateFilteredData(filteredData));
+  
+    // Reset initial load count to show the initial number of jobs
+    setInitialLoadCount(12);
+  };
   return (
     <>
-         <div className="filters">
+      <div className="filters">
         <div>
-          <label htmlFor="input1">Min Experience:</label>
-          <select id="input1">
-            <option value="0">0 years</option>
-            <option value="1">1 year</option>
-            <option value="2">2 years</option>
-            <option value="3">3 years</option>
-            <option value="4">4 years</option>
-            <option value="5">5 years</option>
+          <label htmlFor="experience">Experience:</label>
+          <select
+            id="experience"
+            name="experience"       
+            onChange={handleExperienceChange}>
+            <option value="">Select Experience</option>
+            <option value="1">Fresher</option>
+            <option value="2">1-2 years</option>
+            <option value="3">2-4 years</option>
+            <option value="4">4-7 years</option>
+            <option value="5">7-12 years</option>
           </select>
         </div>
         <div>
-          <label htmlFor="input2">Min Base Pay:</label>
-          <select id="input2">
+          <label htmlFor="minBasePay">Min Base Pay:</label>
+          <select
+            id="minBasePay"
+            name="minBasePay"
+            onChange={handleMinBasePayChange}
+          >
+            <option value="">Select Minimum Pay</option>
+            <option value="0">0-20 usd</option>
             <option value="10000">20-60 usd</option>
             <option value="20000">60-80 usd</option>
             <option value="30000">80-100 usd</option>
@@ -96,42 +148,62 @@ const JobCard = () => {
           </select>
         </div>
         <div>
-          <label htmlFor="input3">Type :</label>
-          <select id="input3">
+          <label htmlFor="type">Type:</label>
+          <select
+            id="type"
+            name="type"
+            onChange={(e) => setFilters({...filters, type: e.target.value})}
+          >
+            <option value="">Select Type</option>
             <option value="Remote">Remote</option>
             <option value="On-site">On-site</option>
             <option value="Hybrid">Hybrid</option>
           </select>
         </div>
         <div>
-          <label htmlFor="input4">Location:</label>
-          <select id="input4">
-            <option value="New York">New York</option>
-            <option value="San Francisco">San Francisco</option>
-            <option value="Los Angeles">Los Angeles</option>
-            <option value="Chicago">Chicago</option>
-            <option value="Boston">Boston</option>
-            <option value="Seattle">Seattle</option>
+          <label htmlFor="location">Location:</label>
+          <select
+            id="location"
+            name="location"
+            onChange={(e) => setFilters({...filters, location: e.target.value})}
+          >
+            <option value="">Select Location</option>
+            <option value="Delhi Ncr">Delhi Ncr</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Mumbai">Mumbai</option>
+            <option value="Chennai">Chennai</option>
+            <option value="Remote">Remote</option>
           </select>
         </div>
         <div>
-          <label htmlFor="input5">Role:</label>
-          <select id="input5">
+          <label htmlFor="role">Role:</label>
+          <select
+            id="role"
+            name="role"
+            onChange={(e) => setFilters({...filters, role: e.target.value})}
+          >
+            <option value="">Select Role</option>
             <option value="Software Engineer">Software Engineer</option>
-            <option value="Data Analyst">Data Analyst</option>
-            <option value="Product Manager">Product Manager</option>
-            <option value="UX/UI Designer">UX/UI Designer</option>
-            <option value="Marketing Specialist">Marketing Specialist</option>
-            <option value="Sales Representative">Sales Representative</option>
+            <option value="Ios Developer">Ios Developer</option>
+            <option value="Android Developer">Android Developer</option>
+            <option value="Tech Lead Developer">Tech Lead Developer</option>
+            <option value="Backend Developer">Backend Developer</option>
+            <option value="Tech Lead Developer">Tech Lead Developer</option>
           </select>
         </div>
-        <div>
-        <label htmlFor="input6">Company Name:</label>
-        <input type="text" placeholder="Enter Company Name " />
+        <div className="input-name">
+          <label htmlFor="companyName">Company Name:</label>
+          <input
+            type="text"
+            id="companyName"
+            name="companyName"
+            onChange={(e) => setFilters({...filters, companyName: e.target.value})}
+            placeholder="Enter Company Name"
+          />
         </div>
-        <div>
-          <button className="search-button">
-            <CiSearch style={{ fontSize: '25px', marginTop: '13px' }} />
+        <div className="search-button-wrapper">
+          <button className="search-button" onClick={handleSearch}>
+            <CiSearch style={{ fontSize: "20px" }} />
           </button>
         </div>
       </div>
